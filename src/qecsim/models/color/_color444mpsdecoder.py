@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 
 @cli_description('MPS ([chi] INT, ...)')
-class Color666MPSDecoder(Decoder):
+class Color444MPSDecoder(Decoder):
     r"""
     Implements a planar Matrix Product State (MPS) decoder.
 

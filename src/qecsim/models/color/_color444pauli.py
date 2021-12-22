@@ -1,7 +1,7 @@
 import numpy as np
 
 
-class Color666Pauli:
+class Color444Pauli:
     """
     Defines a Pauli operator on a color 6.6.6 lattice.
 

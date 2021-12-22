@@ -5,11 +5,11 @@ import operator
 import numpy as np
 
 from qecsim.model import StabilizerCode, cli_description
-from qecsim.models.color import Color666Pauli
+from qecsim.models.color import Color444Pauli
 
 
 @cli_description('Color 6.6.6 (size INT odd >=3)')
-class Color666Code(StabilizerCode):
+class Color444Code(StabilizerCode):
     r"""
     Implements a triangular color 6.6.6 code.
 
@@ -310,7 +310,7 @@ class Color666Code(StabilizerCode):
         :return: Color 6.6.6 Pauli
         :rtype: Color666Pauli
         """
-        return Color666Pauli(self, bsf)
+        return Color444Pauli(self, bsf)
 
     def color(self, index):
         # check valid index
