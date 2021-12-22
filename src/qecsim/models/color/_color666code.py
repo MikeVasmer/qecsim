@@ -81,10 +81,8 @@ class Color666Code(StabilizerCode):
     @functools.lru_cache()
     def stabilizers(self):
         """See :meth:`qecsim.model.StabilizerCode.stabilizers`"""
-        # return np.array([self.new_pauli().plaquette('X', i).to_bsf() for i in self._plaquette_indices]
-        #                 + [self.new_pauli().plaquette('Z', i).to_bsf() for i in self._plaquette_indices])
-        return np.array([self.new_pauli().plaquette_444(i, 1).to_bsf() for i in self._plaquette_indices]
-                        + [self.new_pauli().plaquette_444(i, 2).to_bsf() for i in self._plaquette_indices])
+        return np.array([self.new_pauli().plaquette('X', i).to_bsf() for i in self._plaquette_indices]
+                        + [self.new_pauli().plaquette('Z', i).to_bsf() for i in self._plaquette_indices])
 
     @property
     @functools.lru_cache()
@@ -183,13 +181,9 @@ class Color666Code(StabilizerCode):
         :return: Two sets of plaquette indices (first set for X stabilizers, second for Z stabilizers).
         :rtype: set of 2-tuple of int, set of 2-tuple of int
         """
-        # x_syndrome, z_syndrome = np.hsplit(syndrome, 2)
-        # return (set(tuple(index) for index in np.array(self._plaquette_indices)[x_syndrome.nonzero()]),
-        #         set(tuple(index) for index in np.array(self._plaquette_indices)[z_syndrome.nonzero()]))
-        type1_syndrome, type2_syndrome = np.hsplit(syndrome, 2)
-        return (set(tuple(index) for index in np.array(self._plaquette_indices)[type1_syndrome.nonzero()]),
-                set(tuple(index) for index in np.array(self._plaquette_indices)[type2_syndrome.nonzero()]))
-        
+        x_syndrome, z_syndrome = np.hsplit(syndrome, 2)
+        return (set(tuple(index) for index in np.array(self._plaquette_indices)[x_syndrome.nonzero()]),
+                set(tuple(index) for index in np.array(self._plaquette_indices)[z_syndrome.nonzero()]))
 
     @functools.lru_cache(maxsize=2 ** 15)  # for MxN lattice, cache_size <~ 2(MN) so handle 100x100 codes.
     def virtual_plaquette_index(self, index):
@@ -311,15 +305,3 @@ class Color666Code(StabilizerCode):
         :rtype: Color666Pauli
         """
         return Color666Pauli(self, bsf)
-
-    def color(self, index):
-        # check valid index
-        if not self.is_plaquette(index):
-            raise IndexError('{} is not a plaquette index.'.format(index))
-        r, c = index
-        if r % 3 == 0:
-            return 'g'
-        elif r % 3 == 1:
-            return 'b'
-        elif r % 3 == 2:
-            return 'r'

@@ -161,40 +161,6 @@ class Color666Pauli:
         self.site(operator, (r - 1, c - 1), (r - 1, c), (r, c - 1), (r, c + 1), (r + 1, c), (r + 1, c + 1))
         return self
 
-    def plaquette_444(self, index, type):
-        # check valid index
-        if not self.code.is_plaquette(index):
-            raise IndexError('{} is not a plaquette index.'.format(index))
-        r, c = index
-        col = self.code.color(self, index)
-        if col == 'r' and type == 1:
-            self.site('X', (r + 1, c))
-            self.site('Y', (r + 1, c + 1), (r, c - 1), (r - 1, c))
-            self.site('Z', (r, c + 1), (r - 1, c - 1))
-        elif col == 'r' and type == 2:
-            self.site('X', (r, c + 1), (r - 1, c- 1))
-            self.site('Y', (r + 1, c))
-            self.site('Z', (r + 1, c + 1), (r, c - 1), (r - 1, c))
-        elif col == 'g' and type == 1:
-            self.site('X', (r - 1, c), (r + 1, c + 1), (r, c - 1))
-            self.site('Y', (r - 1, c - 1), (r + 1, c))
-            self.site('Z', (r, c + 1))
-        elif col == 'g' and type == 2:
-            self.site('X', (r - 1, c - 1), (r + 1, c))
-            self.site('Y', (r, c + 1))
-            self.site('Z', (r - 1, c), (r + 1, c + 1), (r, c - 1))
-        elif col == 'b' and type == 1:
-            self.site('X', (r - 1, c - 1))
-            self.site('Y', (r + 1, c + 1), (r, c - 1), (r - 1, c))
-            self.site('Z', (r, c + 1), (r + 1, c))
-        elif col == 'b' and type == 2:
-            self.site('X', (r, c + 1), (r + 1, c))
-            self.site('Y', (r - 1, c - 1))
-            self.site('Z', (r + 1, c + 1), (r, c - 1), (r - 1, c))
-        else:
-            raise ValueError(f'Invalid color: {col}, and/or type: {type}.')
-        
-
     def logical_x(self):
         """
         Apply a logical X operator, i.e. column of X along leftmost sites.
@@ -206,17 +172,10 @@ class Color666Pauli:
         :return: self (to allow chaining)
         :rtype: Color666Pauli
         """
-        # for row in range(self.code.bound + 1):
-        #     index = row, 0
-        #     if self.code.is_site(index):
-        #         self.site('X', index)
         for row in range(self.code.bound + 1):
             index = row, 0
             if self.code.is_site(index):
-                if row % 3 == 0:
-                    self.site('X', index)
-                elif row % 3 == 1:
-                    self.site('Y', index)
+                self.site('X', index)
         return self
 
     def logical_z(self):
@@ -230,17 +189,10 @@ class Color666Pauli:
         :return: self (to allow chaining)
         :rtype: Color666Pauli
         """
-        # for row in range(self.code.bound + 1):
-        #     index = row, 0
-        #     if self.code.is_site(index):
-        #         self.site('Z', index)
         for row in range(self.code.bound + 1):
             index = row, 0
             if self.code.is_site(index):
-                if row % 3 == 0:
-                    self.site('Y', index)
-                elif row % 3 == 1:
-                    self.site('Z', index)
+                self.site('Z', index)
         return self
 
     def __eq__(self, other):

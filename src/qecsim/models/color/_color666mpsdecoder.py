@@ -162,85 +162,23 @@ class Color666MPSDecoder(Decoder):
         # prepare sample
         sample_recovery = code.new_pauli()
         # iterate syndrome_indices and corrective operator
-        # for syndrome_indices, op in zip(code.syndrome_to_plaquette_indices(syndrome), ('Z', 'X')):
-        #     # add path of op from syndrome_index:(r1, c1) to virtual_index:(r2, c2) inclusive
-        #     for r1, c1 in syndrome_indices:
-        #         # find nearest off-boundary plaquette
-        #         r2, c2 = code.virtual_plaquette_index((r1, c1))
-        #         # path along horizontal
-        #         step = np.sign(c2 - c1)
-        #         if step:
-        #             for cc in range(c1, c2 + step, step):
-        #                 if code.is_site((r1, cc)):
-        #                     sample_recovery.site(op, (r1, cc))
-        #         # path along vertical
-        #         step = np.sign(r2 - r1)
-        #         if step:
-        #             for rr in range(r1, r2 + step, step):
-        #                 if code.is_site((rr, c1)):
-        #                     sample_recovery.site(op, (rr, c1))
-        #                     # iterate syndrome_indices and corrective operator
-        for syndrome_indices, type in zip(code.syndrome_to_plaquette_indices(syndrome), (1, 2)):
+        for syndrome_indices, op in zip(code.syndrome_to_plaquette_indices(syndrome), ('Z', 'X')):
             # add path of op from syndrome_index:(r1, c1) to virtual_index:(r2, c2) inclusive
             for r1, c1 in syndrome_indices:
                 # find nearest off-boundary plaquette
                 r2, c2 = code.virtual_plaquette_index((r1, c1))
-                col = code.color((r1, c1))
-                i = 0
-                if col == 'r' and type == 1:
-                    step = 1
+                # path along horizontal
+                step = np.sign(c2 - c1)
+                if step:
                     for cc in range(c1, c2 + step, step):
                         if code.is_site((r1, cc)):
-                            if i % 2 == 0:
-                                sample_recovery.site('X', (r1, cc))
-                            else:
-                                sample_recovery.site('Z', (r1, cc))
-                            i += 1
-                elif col == 'r' and type == 2:
-                    step = 1
-                    for cc in range(c1, c2 + step, step):
-                        if code.is_site((r1, cc)):
-                            if i % 2 == 0:
-                                sample_recovery.site('Z', (r1, cc))
-                            else:
-                                sample_recovery.site('Y', (r1, cc))
-                            i += 1
-                elif col == 'g' and type == 1:
-                    step = -1
-                    for cc in range(c1, c2 + step, step):
-                        if code.is_site((r1, cc)):
-                            if i % 2 == 0:
-                                sample_recovery.site('Z', (r1, cc))
-                            else:
-                                sample_recovery.site('Y', (r1, cc))
-                            i += 1
-                elif col == 'g' and type == 2:
-                    step = -1
-                    for cc in range(c1, c2 + step, step):
-                        if code.is_site((r1, cc)):
-                            if i % 2 == 0:
-                                sample_recovery.site('X', (r1, cc))
-                            else:
-                                sample_recovery.site('Z', (r1, cc))
-                            i += 1
-                elif col == 'b' and type == 1:
-                    step = 1
+                            sample_recovery.site(op, (r1, cc))
+                # path along vertical
+                step = np.sign(r2 - r1)
+                if step:
                     for rr in range(r1, r2 + step, step):
                         if code.is_site((rr, c1)):
-                            if i % 2 == 0:
-                                sample_recovery.site('X', (rr, c1))
-                            else:
-                                sample_recovery.site('Z', (rr, c1))
-                            i += 1
-                elif col == 'b' and type == 2:
-                    step = 1
-                    for rr in range(r1, r2 + step, step):
-                        if code.is_site((rr, c1)):
-                            if i % 2 == 0:
-                                sample_recovery.site('Z', (rr, c1))
-                            else:
-                                sample_recovery.site('Y', (rr, c1))
-                            i += 1
+                            sample_recovery.site(op, (rr, c1))
         # return sample
         return sample_recovery
 
